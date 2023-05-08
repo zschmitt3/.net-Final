@@ -15,6 +15,8 @@ try
     System.Console.WriteLine("Enter 4 to DISPLAY a record to the PRODUCT table");
     System.Console.WriteLine("Enter 5 to ADD a record to the CATEGORY table");
     System.Console.WriteLine("Enter 6 to EDIT a record in the CATEGORY table");
+    System.Console.WriteLine("Enter 7 to DISPLAY the records in the CATEGORY table");
+    System.Console.WriteLine("Enter 8 to DISPLAY active PRODUCTS by CATEGORY");
     char answer = Console.ReadLine()[0];
     logger.Info(answer+" chosen.");
     
@@ -167,6 +169,20 @@ try
                 database.SaveChanges();
             }
         }
+    }else if(answer == '7'){
+        foreach(var category in database.Categories.OrderBy(x => x.CategoryName)){
+            System.Console.WriteLine(category.CategoryName);
+            System.Console.WriteLine("     "+category.Description);
+       }
+    }else if(answer == '8'){
+        foreach(var category in database.Categories.OrderBy(x => x.CategoryName)){
+            System.Console.WriteLine(category.CategoryName);
+            foreach(var product in database.Products.OrderBy(x => x.ProductName)){
+                if(category.CategoryId==product.CategoryId){
+                    System.Console.WriteLine("     "+product.ProductName);
+                }
+            }
+       }
     }
 
 

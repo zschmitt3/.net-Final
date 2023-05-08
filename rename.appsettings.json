@@ -1,6 +1,6 @@
 {
     "Northwind": {
-      "ConnectionString": "Server=bitsql.wctc.edu;Database=NWConsole_23_ZTS;User ID=YYY;Password=ZZZ"
+      "ConnectionString": "Server=bitsql.wctc.edu;Database=NWConsole_23_ZTS;User ID=YYY;Password=ZZZ;MultipleActiveResultSets=true"
     },
     "_comment": {
       "##": "last 2 digits of CRN",
