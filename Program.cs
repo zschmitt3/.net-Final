@@ -17,7 +17,6 @@ try
 
     
     if(answer == '1'){
-        int id = 1+database.Products.OrderByDescending(x => x.ProductId).First().ProductId;
         System.Console.WriteLine("Enter a product name.");
         string name = Console.ReadLine();
         while(name == ""){
@@ -25,7 +24,40 @@ try
             name = Console.ReadLine();
         }
         System.Console.WriteLine("If the product is discontinued, enter TRUE");
-        if(Console.ReadLine().ToLower()[0] == 't'){bool discontinued = true;}else{bool discontinued = false;}
+        bool discontinued;
+        if(Console.ReadLine().ToLower()[0] == 't'){discontinued = true;}else{discontinued = false;}
+        Product newProduct = new Product();
+        newProduct.ProductName = name;
+        newProduct.Discontinued = discontinued;
+        database.Products.Add(newProduct);
+        database.SaveChanges();
+    }else if(answer == '2'){
+
+    }else if(answer == '3'){
+        System.Console.WriteLine("Enter D to display discontinued products");
+        System.Console.WriteLine("Enter A to display active products");
+        System.Console.WriteLine("Enter anything else to display both");
+        char display = Console.ReadLine().ToLower()[0];
+        if(display == 'd'){
+           foreach(var product in database.Products.OrderBy(x => x.ProductName)){
+                if(product.Discontinued){
+                    System.Console.WriteLine(product.ProductName);
+                }
+           }
+        }else if(display == 'a'){
+           foreach(var product in database.Products.OrderBy(x => x.ProductName)){
+                if(!product.Discontinued){
+                    System.Console.WriteLine(product.ProductName);
+                }
+           }
+        }else{
+           foreach(var product in database.Products.OrderBy(x => x.ProductName)){
+                System.Console.WriteLine(product.ProductName);
+           }
+        }
+    }else if(answer == '4'){
+
+    }else if(answer == '4'){
         
     }
 
