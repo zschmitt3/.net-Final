@@ -16,7 +16,8 @@ try
     System.Console.WriteLine("Enter 5 to ADD a record to the CATEGORY table");
     System.Console.WriteLine("Enter 6 to EDIT a record in the CATEGORY table");
     System.Console.WriteLine("Enter 7 to DISPLAY the records in the CATEGORY table");
-    System.Console.WriteLine("Enter 8 to DISPLAY active PRODUCTS by CATEGORY");
+    System.Console.WriteLine("Enter 8 to DISPLAY active PRODUCTS in ALL CATEGORIES");
+    System.Console.WriteLine("Enter 9 to DISPLAY active PRODUCTS in A CATEGORY");
     char answer = Console.ReadLine()[0];
     logger.Info(answer+" chosen.");
     
@@ -178,11 +179,35 @@ try
         foreach(var category in database.Categories.OrderBy(x => x.CategoryName)){
             System.Console.WriteLine(category.CategoryName);
             foreach(var product in database.Products.OrderBy(x => x.ProductName)){
-                if(category.CategoryId==product.CategoryId){
+                if(category.CategoryId==product.CategoryId && !product.Discontinued){
                     System.Console.WriteLine("     "+product.ProductName);
                 }
             }
        }
+    }else if(answer == '9'){
+        System.Console.WriteLine("Enter name of the Category whose Products are to be displayed.");
+        string name = Console.ReadLine();
+        while(name == ""){
+            System.Console.WriteLine("Please enter a valid name.");
+            name = Console.ReadLine();
+        }
+        logger.Info("Name: "+name);
+        Category category = new Category();
+        foreach(var categoryIteration in database.Categories){
+                if(categoryIteration.CategoryName == name){
+                    category = categoryIteration;
+                }
+        }
+
+        if(category == new Category()){
+            System.Console.WriteLine("Invalid category name.");
+        }else{
+            foreach(var product in database.Products.OrderBy(x => x.ProductName)){
+                if(category.CategoryId==product.CategoryId && !product.Discontinued){
+                    System.Console.WriteLine("  "+product.ProductName);
+                }
+            }
+        }
     }
 
 
