@@ -14,7 +14,7 @@ try
     System.Console.WriteLine("Enter 3 to DISPLAY ALL records in the Products table");
     System.Console.WriteLine("Enter 4 to DISPLAY a record to the Products table");
     char answer = Console.ReadLine()[0];
-
+    logger.Info(answer+" chosen.");
     
     if(answer == '1'){
         System.Console.WriteLine("Enter a product name.");
@@ -26,6 +26,7 @@ try
         System.Console.WriteLine("If the product is discontinued, enter TRUE");
         bool discontinued;
         if(Console.ReadLine().ToLower()[0] == 't'){discontinued = true;}else{discontinued = false;}
+        logger.Info("Name: "+name+"; Disc.: "+discontinued);
         Product newProduct = new Product();
         newProduct.ProductName = name;
         newProduct.Discontinued = discontinued;
@@ -34,6 +35,12 @@ try
     }else if(answer == '2'){
         System.Console.WriteLine("Enter name of the product to be edited.");
         string productName = Console.ReadLine();
+        while(productName == ""){
+            System.Console.WriteLine("Please enter a valid name.");
+            productName = Console.ReadLine();
+        }
+        logger.Info("Name: "+productName);
+
         Product product = new Product();
         foreach(var productIteration in database.Products){
                 if(productIteration.ProductName == productName){
@@ -42,10 +49,12 @@ try
         }
         if(product == new Product()){
             System.Console.WriteLine("Invalid product name.");
+            logger.Error("Product not found.");
         }else{
             System.Console.WriteLine("Enter N to edit the Product Name");
             System.Console.WriteLine("Enter D to toggle Discontinued");
             char editColumn = Console.ReadLine().ToLower()[0];
+            logger.Info(editColumn+" selected.");
             if(editColumn == 'n'){
                 System.Console.WriteLine("Enter a new name:");
                 product.ProductName = Console.ReadLine();
@@ -60,6 +69,7 @@ try
         System.Console.WriteLine("Enter A to display active products");
         System.Console.WriteLine("Enter anything else to display both");
         char display = Console.ReadLine().ToLower()[0];
+        logger.Info(display+" selected.");
         
         if(display == 'd'){
            foreach(var product in database.Products.OrderBy(x => x.ProductName)){
@@ -79,8 +89,13 @@ try
            }
         }
     }else if(answer == '4'){
-        System.Console.WriteLine("Enter name of the product to be edited.");
+        System.Console.WriteLine("Enter name of the product to be displayed.");
         string productName = Console.ReadLine();
+        while(productName == ""){
+            System.Console.WriteLine("Please enter a valid name.");
+            productName = Console.ReadLine();
+        }
+        logger.Info("Name: "+productName);
         Product product = new Product();
         foreach(var productIteration in database.Products){
                 if(productIteration.ProductName == productName){
