@@ -32,12 +32,35 @@ try
         database.Products.Add(newProduct);
         database.SaveChanges();
     }else if(answer == '2'){
-
+        System.Console.WriteLine("Enter name of the product to be edited.");
+        string productName = Console.ReadLine();
+        Product product = new Product();
+        foreach(var productIteration in database.Products){
+                if(productIteration.ProductName == productName){
+                    product = productIteration;
+                }
+        }
+        if(product == new Product()){
+            System.Console.WriteLine("Invalid product name.");
+        }else{
+            System.Console.WriteLine("Enter N to edit the Product Name");
+            System.Console.WriteLine("Enter D to toggle Discontinued");
+            char editColumn = Console.ReadLine().ToLower()[0];
+            if(editColumn == 'n'){
+                System.Console.WriteLine("Enter a new name:");
+                product.ProductName = Console.ReadLine();
+                database.SaveChanges();
+            }else if(editColumn == 'd'){
+                if(product.Discontinued){product.Discontinued=false;}else{product.Discontinued=true;}
+                database.SaveChanges();
+            }
+        }
     }else if(answer == '3'){
         System.Console.WriteLine("Enter D to display discontinued products");
         System.Console.WriteLine("Enter A to display active products");
         System.Console.WriteLine("Enter anything else to display both");
         char display = Console.ReadLine().ToLower()[0];
+        
         if(display == 'd'){
            foreach(var product in database.Products.OrderBy(x => x.ProductName)){
                 if(product.Discontinued){
@@ -56,9 +79,29 @@ try
            }
         }
     }else if(answer == '4'){
+        System.Console.WriteLine("Enter name of the product to be edited.");
+        string productName = Console.ReadLine();
+        Product product = new Product();
+        foreach(var productIteration in database.Products){
+                if(productIteration.ProductName == productName){
+                    product = productIteration;
+                }
+        }
 
-    }else if(answer == '4'){
-        
+        if(product == new Product()){
+            System.Console.WriteLine("Invalid product name.");
+        }else{
+            System.Console.WriteLine(product.ProductId);
+            System.Console.WriteLine(product.ProductName);
+            System.Console.WriteLine(product.SupplierId);
+            System.Console.WriteLine(product.CategoryId);
+            System.Console.WriteLine(product.QuantityPerUnit);
+            System.Console.WriteLine(product.UnitPrice);
+            System.Console.WriteLine(product.UnitsInStock);
+            System.Console.WriteLine(product.UnitsOnOrder);
+            System.Console.WriteLine(product.ReorderLevel);
+            System.Console.WriteLine(product.Discontinued);
+        }
     }
 
 
