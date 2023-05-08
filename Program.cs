@@ -9,10 +9,12 @@ logger.Info("Program started");
 try
 {
     var database = new NWContext();
-    System.Console.WriteLine("Enter 1 to ADD a record to the Products table");
-    System.Console.WriteLine("Enter 2 to EDIT a record in the Products table");
-    System.Console.WriteLine("Enter 3 to DISPLAY ALL records in the Products table");
-    System.Console.WriteLine("Enter 4 to DISPLAY a record to the Products table");
+    System.Console.WriteLine("Enter 1 to ADD a record to the PRODUCT table");
+    System.Console.WriteLine("Enter 2 to EDIT a record in the PRODUCT table");
+    System.Console.WriteLine("Enter 3 to DISPLAY ALL records in the PRODUCT table");
+    System.Console.WriteLine("Enter 4 to DISPLAY a record to the PRODUCT table");
+    System.Console.WriteLine("Enter 5 to ADD a record to the CATEGORY table");
+    System.Console.WriteLine("Enter 6 to EDIT a record in the CATEGORY table");
     char answer = Console.ReadLine()[0];
     logger.Info(answer+" chosen.");
     
@@ -116,6 +118,54 @@ try
             System.Console.WriteLine(product.UnitsOnOrder);
             System.Console.WriteLine(product.ReorderLevel);
             System.Console.WriteLine(product.Discontinued);
+        }
+    }else if(answer == '5'){
+        System.Console.WriteLine("Enter a category name.");
+        string name = Console.ReadLine();
+        while(name == ""){
+            System.Console.WriteLine("Please enter a valid name.");
+            name = Console.ReadLine();
+        }
+        System.Console.WriteLine("Enter a description (optional)");
+        string description = Console.ReadLine();
+        logger.Info("Name: "+name+"; Desc.: "+description);
+        Category category = new Category();
+        category.CategoryName = name;
+        category.Description = description;
+        database.Categories.Add(category);
+        database.SaveChanges();
+    }else if(answer == '6'){
+        System.Console.WriteLine("Enter name of the category to be edited.");
+        string name = Console.ReadLine();
+        while(name == ""){
+            System.Console.WriteLine("Please enter a valid name.");
+            name = Console.ReadLine();
+        }
+        logger.Info("Name: "+name);
+
+        Category category = new Category();
+        foreach(var categoryIteration in database.Categories){
+                if(categoryIteration.CategoryName == name){
+                    category = categoryIteration;
+                }
+        }
+        if(category == new Category()){
+            System.Console.WriteLine("Invalid category name.");
+            logger.Error("Category not found.");
+        }else{
+            System.Console.WriteLine("Enter N to edit the Category Name");
+            System.Console.WriteLine("Enter D to edit the Category Description");
+            char editColumn = Console.ReadLine().ToLower()[0];
+            logger.Info(editColumn+" selected.");
+            if(editColumn == 'n'){
+                System.Console.WriteLine("Enter a new name:");
+                category.CategoryName = Console.ReadLine();
+                database.SaveChanges();
+            }else if(editColumn == 'd'){
+                System.Console.WriteLine("Enter a new description:");
+                category.Description = Console.ReadLine();
+                database.SaveChanges();
+            }
         }
     }
 
