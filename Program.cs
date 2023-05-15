@@ -18,6 +18,8 @@ try
     System.Console.WriteLine("Enter 7 to DISPLAY the records in the CATEGORY table");
     System.Console.WriteLine("Enter 8 to DISPLAY active PRODUCTS in ALL CATEGORIES");
     System.Console.WriteLine("Enter 9 to DISPLAY active PRODUCTS in A CATEGORY");
+    System.Console.WriteLine("Enter 0 to REMOVE a record from the PRODUCT table");
+    System.Console.WriteLine("Enter - to REMOVE a record from the CATEGORY table");
     char answer = Console.ReadLine()[0];
     logger.Info(answer+" chosen.");
     
@@ -207,6 +209,66 @@ try
                     System.Console.WriteLine("  "+product.ProductName);
                 }
             }
+        }
+    }else if(answer == '0'){
+        System.Console.WriteLine("Enter name of the product to be deleted.");
+        string productName = Console.ReadLine();
+        while(productName == ""){
+            System.Console.WriteLine("Please enter a valid name.");
+            productName = Console.ReadLine();
+        }
+        logger.Info("Name: "+productName);
+        Product product = new Product();
+        foreach(var productIteration in database.Products){
+            if(productIteration.ProductName == productName){
+                product = productIteration;
+            }
+        }
+
+        if(product == new Product()){
+            System.Console.WriteLine("Invalid product name.");
+        }else{
+            foreach(var iteration in database.OrderDetails){
+                if(iteration.ProductId == product.ProductId){
+                    database.OrderDetails.Remove(iteration);
+                }
+            }
+            foreach(var iteration in database.Products){
+                if(iteration.ProductId == product.ProductId){
+                    database.Products.Remove(iteration);
+                }
+            }
+            database.SaveChanges();
+        }
+    }else if(answer == '-'){
+        System.Console.WriteLine("Enter name of the category to be deleted.");
+        string name = Console.ReadLine();
+        while(name == ""){
+            System.Console.WriteLine("Please enter a valid name.");
+            name = Console.ReadLine();
+        }
+        logger.Info("Name: "+name);
+        Category category = new Category();
+        foreach(var categoryIteration in database.Categories){
+            if(categoryIteration.CategoryName == name){
+                category = categoryIteration;
+            }
+        }
+
+        if(category == new Category()){
+            System.Console.WriteLine("Invalid category name.");
+        }else{
+            foreach(var iteration in database.Products){
+                if(iteration.CategoryId == category.CategoryId){
+                    iteration.CategoryId = null;
+                }
+            }
+            foreach(var iteration in database.Categories){
+                if(iteration.CategoryId == category.CategoryId){
+                    database.Categories.Remove(iteration);
+                }
+            }
+            database.SaveChanges();
         }
     }
 
